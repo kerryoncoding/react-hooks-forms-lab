@@ -1,29 +1,45 @@
 import React, {useState} from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm(props) {
+function ItemForm( {onItemFormSubmit} ) {
 
-  const [newItem, setNewItem]= useState({})
+  const [itemName, setItemName]= useState("")
+  const [itemCategory, setItemCategory]= useState("Produce")
+  
 
-  function updateList(e){
-    e.preventDefault()
-    console.log(e.target.name.value)
-    console.log(e.target.category.value)
-    setNewItem(
-      { name: e.target.name.value, category: e.target.category.value}      
-    )
+  function handleSelection(e){
+   // console.log(e.target.value)
+    setItemCategory(e.target.value)
   }
 
+  function handleInput(e){
+ //   console.log(e.target.value)
+    setItemName(e.target.value)
+  }
+
+  function handleFormSubmit(e){
+    e.preventDefault()
+    const newItem = {
+      id: uuid(), // the `uuid` library can be used to generate a unique id
+      name: itemName,
+      category: itemCategory,
+    };
+    //console.log(newItem)
+    onItemFormSubmit(newItem)
+    console.log("here:", onItemFormSubmit)
+  }
+
+  
   return (
-    <form className="NewItem" onSubmit={updateList}>
+    <form className="NewItem" onSubmit={handleFormSubmit}>
       <label>
         Name:
-        <input type="text" name="name" />
+        <input type="text" name="name" onChange={handleInput}/>
       </label>
 
       <label>
         Category:
-        <select name="category">
+        <select name="category" onChange={handleSelection}>
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>
